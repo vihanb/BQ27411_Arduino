@@ -1,28 +1,16 @@
 /******************************************************************************
-SparkFunBQ27441.h
-BQ27441 Arduino Library Main Header File
-Jim Lindblom @ SparkFun Electronics
-May 9, 2016
-https://github.com/sparkfun/SparkFun_BQ27441_Arduino_Library
+BQ27411.h
+BQ27411 Arduino Library Main Header File
 
-Definition of the BQ27441 library, which implements all features of the
-BQ27441 LiPo Fuel Gauge.
-
-Hardware Resources:
-- Arduino Development Board
-- SparkFun Battery Babysitter
-
-Development environment specifics:
-Arduino 1.6.7
-SparkFun Battery Babysitter v1.0
-Arduino Uno (any 'duino should do)
+Definition of the BQ27411 library, which implements all features of the
+BQ27411 LiPo Fuel Gauge.
 ******************************************************************************/
 
-#ifndef SparkFunBQ27441_h
-#define SparkFunBQ27441_h
+#ifndef BQ27411_h
+#define BQ27411_h
 
 #include "Arduino.h"
-#include "BQ27441_Definitions.h"
+#include "BQ27411_Definitions.h"
 
 #define BQ72441_I2C_TIMEOUT 2000
 
@@ -70,7 +58,7 @@ typedef enum {
 	BAT_LOW  // Set GPOUT to BAT_LOW functionality
 } gpout_function;
 
-class BQ27441 {
+class BQ27411 {
 public:
 	//////////////////////////////
 	// Initialization Functions //
@@ -78,10 +66,10 @@ public:
 	/**
 	    Initializes class variables
 	*/
-	BQ27441();
+	BQ27411();
 	
 	/**
-	    Initializes I2C and verifies communication with the BQ27441.
+	    Initializes I2C and verifies communication with the BQ27411.
 		Must be called before using any other functions.
 		
 		@return true if communication was successful.
@@ -357,27 +345,28 @@ public:
 	uint16_t status(void);
 	
 private:
-	uint8_t _deviceAddress;  // Stores the BQ27441-G1A's I2C address
+    TwoWire *_wire; // The wire library to use
+	uint8_t _deviceAddress;  // Stores the BQ27411-G1A's I2C address
 	bool _sealFlag; // Global to identify that IC was previously sealed
 	bool _userConfigControl; // Global to identify that user has control over 
 	                         // entering/exiting config
 	
 	/**
-	    Check if the BQ27441-G1A is sealed or not.
+	    Check if the BQ27411-G1A is sealed or not.
 		
 		@return true if the chip is sealed
 	*/
 	bool sealed(void);
 	
 	/**
-	    Seal the BQ27441-G1A
+	    Seal the BQ27411-G1A
 		
 		@return true on success
 	*/
 	bool seal(void);
 	
 	/**
-	    UNseal the BQ27441-G1A
+	    UNseal the BQ27411-G1A
 		
 		@return true on success
 	*/
@@ -399,14 +388,14 @@ private:
 	bool writeOpConfig(uint16_t value);
 	
 	/**
-	    Issue a soft-reset to the BQ27441-G1A
+	    Issue a soft-reset to the BQ27411-G1A
 		
 		@return true on success
 	*/	
 	bool softReset(void);
 	
 	/**
-	    Read a 16-bit command word from the BQ27441-G1A
+	    Read a 16-bit command word from the BQ27411-G1A
 		
 		@param subAddress is the command to be read from
 		@return 16-bit value of the command's contents
@@ -414,7 +403,7 @@ private:
 	uint16_t readWord(uint16_t subAddress);
 	
 	/**
-	    Read a 16-bit subcommand() from the BQ27441-G1A's control()
+	    Read a 16-bit subcommand() from the BQ27411-G1A's control()
 		
 		@param function is the subcommand of control() to be read
 		@return 16-bit value of the subcommand's contents
@@ -422,7 +411,7 @@ private:
 	uint16_t readControlWord(uint16_t function);
 	
 	/**
-	    Execute a subcommand() from the BQ27441-G1A's control()
+	    Execute a subcommand() from the BQ27411-G1A's control()
 		
 		@param function is the subcommand of control() to be executed
 		@return true on success
@@ -541,7 +530,7 @@ private:
 	uint16_t i2cWriteBytes(uint8_t subAddress, uint8_t * src, uint8_t count);
 };
 
-extern BQ27441 lipo; // Use lipo.[] to interact with the library in an Arduino sketch
+extern BQ27411 lipo; // Use lipo.[] to interact with the library in an Arduino sketch
 // Thanks for reading!
 
 #endif
